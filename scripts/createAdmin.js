@@ -5,11 +5,15 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const { loadLocalEnv } = require('./load-local-env.js');
 
-// Load environment variables
-require('dotenv').config({ path: '.env.local' });
+loadLocalEnv();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://LOVJEET:LOVJEETMONGO@cluster0.zpzj90m.mongodb.net/ai_avatar_studio';
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  console.error('Missing MONGODB_URI. Set it in .env.local or your shell environment.');
+  process.exit(1);
+}
 
 const UserSchema = new mongoose.Schema({
   username: String,
